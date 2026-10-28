@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resolve – AI Front Desk & Operations Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Check-in portal -->
+<div class="login-portal" id="loginPortal">
+<div class="login-box">
+<div class="login-top">
+<div class="login-brand"><i id="portalLogo"></i><span>resolve<em style="color:var(--ac);font-style:normal">.</em></span></div>
+<div class="seg" id="portalTheme" role="group" aria-label="Theme">
+<button data-th="light" aria-label="Light theme"></button>
+<button data-th="dark" aria-label="Dark theme"></button>
+</div>
+</div>
+
+<div class="stepper" id="stepper">
+<div class="stepper-line"></div>
+<div class="stepper-line-fill" id="stepperFill"></div>
+<div class="stepper-node active" id="stepNode1" onclick="goToStep(1)"><div class="stepper-num" id="stepNum1">1</div><span class="stepper-text">Name &amp; Gender</span></div>
+<div class="stepper-node" id="stepNode2" onclick="goToStep(2)"><div class="stepper-num" id="stepNum2">2</div><span class="stepper-text">Contact &amp; Address</span></div>
+</div>
+
+<form class="login-form" id="loginForm" novalidate onsubmit="return false;">
+<div class="step-pane active" id="stepPane1">
+<div class="step-intro"><h2>Personal Details</h2><p>Please enter your name and select your gender to personalize Resolve AI.</p></div>
+<div class="field" id="fieldName">
+<div class="field-header"><label for="logName">Full Name <span class="req">*</span></label><span class="field-status" id="stName"></span></div>
+<div class="input-wrap" id="wrapName"><input type="text" id="logName" placeholder="e.g. Aditi Sharma" autocomplete="name" required autofocus></div>
+<div class="field-msg" id="msgName">Must contain at least 2 alphabetic characters (letters and spaces only).</div>
+</div>
+<div class="field" id="fieldGender">
+<div class="field-header"><label>Gender <span class="req">*</span></label><span class="field-status" id="stGender"></span></div>
+<div class="gender-options" id="genderOptions">
+<button type="button" class="gender-btn" data-val="Male"><span class="radio-circle"></span> <span>👨 Male</span></button>
+<button type="button" class="gender-btn" data-val="Female"><span class="radio-circle"></span> <span>👩 Female</span></button>
+<button type="button" class="gender-btn" data-val="Non-binary"><span class="radio-circle"></span> <span>⚧ Non-binary</span></button>
+<button type="button" class="gender-btn" data-val="Prefer not to say"><span class="radio-circle"></span> <span>🔒 Prefer not to say</span></button>
+</div>
+<input type="hidden" id="logGender" value="">
+<div class="field-msg" id="msgGender">Select your gender preference.</div>
+</div>
+<div class="step-actions"><button type="button" class="btn-next" id="btnStep1Next"><span>Next: Contact &amp; Address</span><span id="step1Arr"></span></button></div>
+</div>
+
+<div class="step-pane" id="stepPane2">
+<div class="step-intro"><h2>Contact &amp; Address</h2><p>Where can our certified fleet technicians coordinate visits and reach you?</p></div>
+<div class="field" id="fieldPhone">
+<div class="field-header"><label for="logPhone">Mobile Phone Number <span class="req">*</span></label><span class="field-status" id="stPhone"></span></div>
+<div class="input-wrap has-prefix" id="wrapPhone"><span class="input-prefix">🇮🇳 +91</span><input type="tel" id="logPhone" placeholder="98201 44102" autocomplete="tel" maxlength="14" required></div>
+<div class="field-msg" id="msgPhone">Valid 10-digit mobile number starting with 6, 7, 8, or 9.</div>
+</div>
+<div class="field" id="fieldAddress">
+<div class="field-header"><label for="logAddress">Premises Address <span class="req">*</span></label><span class="field-status" id="stAddress"></span></div>
+<div class="input-wrap" id="wrapAddress"><textarea id="logAddress" class="form-textarea" style="min-height:68px;" placeholder="Flat / House No., Society / Building, Street name" required></textarea></div>
+<div class="addr-grid">
+<div class="field"><label for="logCity" style="font-size:11.5px;font-weight:600;color:var(--mut);">City <span class="req">*</span></label>
+<div class="input-wrap" id="wrapCity"><input type="text" id="logCity" list="citySuggestions" placeholder="e.g. Pune" required>
+<datalist id="citySuggestions"><option value="Pune"><option value="Mumbai"><option value="Indore"><option value="Bengaluru"><option value="Thane"></datalist></div></div>
+<div class="field"><label for="logPincode" style="font-size:11.5px;font-weight:600;color:var(--mut);">Pincode (Optional)</label>
+<div class="input-wrap" id="wrapPin"><input type="text" id="logPincode" maxlength="6" placeholder="e.g. 411045"></div></div>
+</div>
+<div class="field-msg" id="msgAddress">Enter a complete street or apartment address (minimum 8 characters).</div>
+</div>
+<div class="step-actions">
+<button type="button" class="btn-back" id="btnStep2Back">← Back</button>
+<button type="submit" class="btn-submit-login" id="btnStep2Submit"><span>Enter Front Desk Operations</span><span id="step2Arr"></span></button>
+</div>
+</div>
+
+<div class="quick-demo-login"><span>Need sample data for demo?</span><button type="button" id="btnAutoFillSample">Auto-fill Sample Visitor</button></div>
+</form>
+</div>
+</div>
+
+<div class="app" id="mainApp">
+<aside class="side">
+<a href="#" class="logo" id="logoLink"><i id="lg"></i><span>resolve<em>.</em></span></a>
+<button class="ws" id="wsBtn"><span class="av">H</span><div><b id="wsName">HomeCare</b><span id="wsDesc">Customer operations</span></div></button>
+<div class="lbl">Operations</div>
+<nav id="nav"></nav>
+<div class="sp"></div>
+<div class="ready"><b><i class="dot pulsing"></i>Live Front Desk</b><span>AI routing active · Pune &amp; Mumbai coverage</span></div>
+<div class="status-dot" id="connStatus"></div>
+<button class="nv" id="set"></button>
+<div class="me" id="userBadge">
+<div class="av" id="userAvatar">HC</div>
+<div style="flex:1;min-width:0;"><b id="userName">HomeCare Team</b><span id="userMeta">Supervisor Mode</span></div>
+<button class="user-switch-btn" id="btnSwitchProfile" title="Edit visitor profile">Edit</button>
+</div>
+<button class="logout-btn" id="btnLogout"><span id="logoutIcon"></span><span>Log Out</span></button>
+</aside>
+
+<main class="main">
+<div class="top">
+<div><div class="lbl" id="topTag">Your AI Front Desk</div><h1 id="h1">Customer care, handled.</h1><div class="sub" id="sub">Every conversation. A clear next step.</div></div>
+<div class="acts">
+<button class="btn-sec" id="btnExport"></button>
+<button class="btn-sec" id="btnNewRecord"></button>
+<div class="seg" id="theme" role="group" aria-label="Theme"><button data-th="light" aria-label="Light theme"></button><button data-th="dark" aria-label="Dark theme"></button></div>
+<button class="pri" id="newc"></button>
+</div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="grid" id="grid">
+<section class="card ch" id="chatc">
+<div class="chh">
+<div class="tile t-b" id="spk"></div>
+<div><b>Resolve Front Desk</b><span>HomeCare virtual concierge · 24/7 active</span></div>
+<div class="ch-actions">
+<button class="btn-icon-subtle" id="btnTts" title="Toggle voice replies"></button>
+<button class="btn-icon-subtle" id="btnAudioMute" title="Toggle sound effects"></button>
+<span class="pill p-g"><i class="dot"></i>Online</span>
+</div>
+</div>
+<div class="demo" id="demo">
+<div class="tag"><i class="dot"></i> <span id="demoText">Powered by Groq · data in Supabase</span></div>
+<div class="demo-links"><button id="btnQuickBooking">Demo: Quick Booking</button><button id="btnQuickUrgent">Demo: Urgent Issue</button></div>
+</div>
+<div class="msgs" id="msgs" aria-live="polite"></div>
+<div class="comp">
+<button class="ib" id="mic" aria-label="Voice input"></button>
+<input id="inp" placeholder="Type a message, request repair, ask pricing…" autocomplete="off">
+<button class="pri" id="send" style="padding:10px 16px"></button>
+</div>
+</section>
+
+<section class="card feed" id="feedCard">
+<div class="fh">
+<div><b id="ft">Operations Feed</b><span id="fs">Live records</span></div>
+<div class="fh-right"><div class="live"><i class="dot pulsing"></i>LIVE</div></div>
+</div>
+<div class="toolbar" id="feedToolbar">
+<label class="sr"><span id="si"></span><input id="q" placeholder="Search by customer, issue, city, or ID…"></label>
+<div class="filter-chips" id="filterChips">
+<button class="chip active" data-status="all">All</button>
+<button class="chip" data-status="action_needed">Needs Action</button>
+<button class="chip" data-status="Confirmed">Confirmed</button>
+<button class="chip" data-status="Open">Open</button>
+<button class="chip" data-status="In Progress">In Progress</button>
+<button class="chip" data-status="Resolved">Resolved</button>
+</div>
+</div>
+<div class="list" id="list"></div>
+</section>
+</div>
+</main>
+</div>
+
+<!-- Drawer -->
+<div class="drawer" id="drawer">
+<div class="drawer-h">
+<div><span class="pill" id="dTypePill">Booking</span><h3 id="dTitle" style="margin-top:8px;font-size:18px;"></h3><span id="dId" style="font-family:'JetBrains Mono',monospace;color:var(--mut);font-size:11.5px;"></span></div>
+<button class="btn-icon-subtle" id="closeDrawer" aria-label="Close drawer">✕</button>
+</div>
+<div class="drawer-b">
+<div class="form-group"><label>Status</label>
+<select class="form-select" id="dStatusSelect"><option>Open</option><option>In Progress</option><option>Confirmed</option><option>Resolved</option><option>Cancelled</option></select></div>
+<div class="form-group"><label>Assigned Specialist</label>
+<select class="form-select" id="dTechSelect"><option value="Unassigned">Unassigned</option><option>Ramesh Patil (Senior Tech)</option><option>Vikas Kamble (HVAC Specialist)</option><option>Anand Deshmukh (Appliance Lead)</option><option>Sunita Nair (Customer Support)</option></select></div>
+<div class="form-group"><label>Details / Request Summary</label><div id="dText" style="font-size:14px;background:var(--bg);padding:12px;border-radius:10px;border:1px solid var(--bd);"></div></div>
+<div class="form-row">
+<div class="form-group"><label>Customer Contact</label><input class="form-input" id="dContact" placeholder="Phone or email"></div>
+<div class="form-group"><label>Scheduled / Deadline</label><input class="form-input" id="dMeta" placeholder="Time slot or urgency"></div>
+</div>
+<div class="form-group"><label>Add Internal Staff Note</label>
+<div style="display:flex;gap:8px;"><input class="form-input" id="dNewNote" placeholder="e.g., Called customer, confirmed address..."><button class="btn-sec" id="btnAddNote" style="white-space:nowrap;">Post Note</button></div></div>
+<div class="form-group"><label>Activity Log</label><div class="timeline" id="dTimeline"></div></div>
+</div>
+<div class="drawer-f">
+<button class="btn-sec" id="btnDeleteRecord" style="color:var(--red);border-color:rgba(217,56,56,.3);">Delete Record</button>
+<button class="pri" id="btnSaveDrawer">Save Changes</button>
+</div>
+</div>
+
+<!-- Modal: new record -->
+<div class="backdrop" id="modalNewRecord"><div class="modal">
+<div class="modal-h"><h3>Add New Record Manually</h3><button class="btn-icon-subtle" onclick="closeModal('modalNewRecord')">✕</button></div>
+<div class="modal-body">
+<div class="form-group"><label>Record Type</label><select class="form-select" id="mType"><option value="booking">Booking (Service Visit)</option><option value="ticket">Support Ticket (Escalation)</option><option value="lead">Sales Lead (Inquiry / AMC)</option></select></div>
+<div class="form-row">
+<div class="form-group"><label>Customer Name</label><input class="form-input" id="mName" placeholder="Full name"></div>
+<div class="form-group"><label>Contact Phone / Email</label><input class="form-input" id="mPhone" placeholder="+91 98..."></div>
+</div>
+<div class="form-group"><label>Description / Issue</label><textarea class="form-textarea" id="mText" placeholder="Describe the appliance, problem, or service required..."></textarea></div>
+<div class="form-row">
+<div class="form-group"><label>Service Area / Location</label><input class="form-input" id="mLocation" placeholder="e.g., Baner, Pune"></div>
+<div class="form-group"><label>Time Slot / Target</label><input class="form-input" id="mSlot" placeholder="e.g., Tomorrow, 11:00 am"></div>
+</div>
+</div>
+<div class="modal-f"><button class="btn-sec" onclick="closeModal('modalNewRecord')">Cancel</button><button class="pri" id="btnCreateRecordSubmit">Create Record</button></div>
+</div></div>
+
+<!-- Modal: KB -->
+<div class="backdrop" id="modalKb"><div class="modal">
+<div class="modal-h"><h3 id="modalKbTitle">Add Knowledge Base Article</h3><button class="btn-icon-subtle" onclick="closeModal('modalKb')">✕</button></div>
+<div class="modal-body">
+<input type="hidden" id="kbEditIndex" value="-1">
+<div class="form-group"><label>Topic / Question Title</label><input class="form-input" id="kbTitle" placeholder="e.g., Water Purifier Filter Replacement"></div>
+<div class="form-row">
+<div class="form-group"><label>Category</label><select class="form-select" id="kbCategory"><option value="Pricing">Pricing &amp; Inspection</option><option value="Operations">Hours &amp; Coverage</option><option value="Warranty">Warranty &amp; Guarantee</option><option value="Maintenance">Maintenance Tips</option><option value="Policy">Company Policy</option></select></div>
+<div class="form-group"><label>Trigger Keywords (comma-separated)</label><input class="form-input" id="kbKeywords" placeholder="filter, ro, purifier"></div>
+</div>
+<div class="form-group"><label>AI Answer / Response Text</label><textarea class="form-textarea" id="kbAnswer" style="min-height:110px" placeholder="Explain the policy, pricing, or instructions clearly..."></textarea></div>
+</div>
+<div class="modal-f"><button class="btn-sec" onclick="closeModal('modalKb')">Cancel</button><button class="pri" id="btnSaveKb">Save Article</button></div>
+</div></div>
+
+<!-- Modal: settings -->
+<div class="backdrop" id="modalSettings"><div class="modal">
+<div class="modal-h"><h3>Front Desk &amp; Workspace Settings</h3><button class="btn-icon-subtle" onclick="closeModal('modalSettings')">✕</button></div>
+<div class="modal-body">
+<div class="lbl">Business Identity</div>
+<div class="form-row">
+<div class="form-group"><label>Company / Brand Name</label><input class="form-input" id="cfgBrandName"></div>
+<div class="form-group"><label>Tagline / Specialty</label><input class="form-input" id="cfgTagline"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Inspection Fee (₹)</label><input class="form-input" type="number" id="cfgFee"></div>
+<div class="form-group"><label>Service Coverage Cities</label><input class="form-input" id="cfgCities"></div>
+</div>
+<div class="lbl" style="margin-top:10px;">AI Persona &amp; Voice</div>
+<div class="form-group"><label>AI Assistant Tone</label>
+<select class="form-select" id="cfgTone"><option value="friendly">Warm, friendly &amp; helpful (Default)</option><option value="professional">Professional, efficient &amp; concise</option><option value="technical">Diagnostic &amp; technical specialist</option></select></div>
+<div class="form-group"><label>Speech Synthesis (TTS) Read Aloud</label>
+<select class="form-select" id="cfgVoiceTts"><option value="off">Off (silent text responses)</option><option value="on">On (bot replies read aloud)</option></select></div>
+<div class="lbl" style="margin-top:10px;">Data &amp; Reset</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+<button class="btn-sec" id="btnResetDemoData" style="color:var(--amb);">Reset to Sample Data</button>
+<button class="btn-sec" id="btnClearAllData" style="color:var(--red);">Clear All Records</button>
+</div>
+</div>
+<div class="modal-f"><button class="btn-sec" onclick="closeModal('modalSettings')">Cancel</button><button class="pri" id="btnSaveSettings">Save Preferences</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "resolve-ai-front-desk",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AI front desk & operations hub (Groq + Supabase, deployable on Vercel)",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
